@@ -1,0 +1,29 @@
+{
+  "ts-node": {
+    "files": true
+  },
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+
+    "rootDir": "src",
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": false,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "baseUrl": "./",
+    "paths": {
+      "@scraper/*": ["src/services/scraper/*"],
+      "@core/*": ["src/services/core/*"]
+    }
+  },
+  "exclude": ["junk"]
+}
