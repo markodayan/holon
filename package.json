@@ -5,7 +5,9 @@
   "main": "main.js",
   "scripts": {
     "scraper:dev": "pm2 start dev.config.js --only scraper",
-    "scraper:core": "pm2 start dev.config.js --only core"
+    "scraper:core": "pm2 start dev.config.js --only core",
+    "scraper:dev:build-image": "docker build -t dev/scraper -f src/services/scraper/Dockerfile.dev .",
+    "scraper:dev:create-container": "docker run -d -p 5000:5000 --name scraper dev/scraper"
   },
   "keywords": [],
   "author": "",
