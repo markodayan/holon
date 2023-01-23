@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: urs-test-1
+    volumes:
+      - ${DB_HOST_PATH}:${DB_CONTAINER_PATH}
+    ports:
+      - '5433:5432'
+  backend:
+    # image: urs-backend
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - db
+    ports:
+      - '5000:8000'
+      - '5001:8001'
+volumes:
+  db:
+    external: true

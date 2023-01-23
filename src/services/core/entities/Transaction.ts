@@ -2,23 +2,27 @@ import { Entity, BaseEntity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Transaction extends BaseEntity {
-  // 66 = 64 length (32 bytes) + 2 for '0x'
   @PrimaryColumn({
     unique: true,
     length: 66,
   })
   hash: string;
+  // 66 = 64 length (32 bytes) + 2 for '0x'
+
+  // For 2930 and 1559 TXs only
+  @Column('simple-array', { nullable: true })
+  access_list: string[];
 
   @Column()
-  block_hash: string;
+  blockHash: string;
 
   @Column({
     unique: true,
   })
-  block_number: string;
+  blockNumber: string;
 
   @Column()
-  chain_id: number;
+  chainId: number;
 
   @Column()
   from: string;
@@ -27,10 +31,18 @@ export class Transaction extends BaseEntity {
   gas: number;
 
   @Column()
-  gas_price: number;
+  gasPrice: number;
 
   @Column()
   input: string;
+
+  // For 1559 TXs only
+  @Column({ nullable: true })
+  max_fee_per_gas: number;
+
+  // For 1559 TXs only
+  @Column({ nullable: true })
+  max_priority_fee_per_gas: number;
 
   @Column()
   nonce: string;
@@ -45,7 +57,7 @@ export class Transaction extends BaseEntity {
   to: string;
 
   @Column()
-  transaction_index: number;
+  transactionIndex: number;
 
   @Column()
   type: number;

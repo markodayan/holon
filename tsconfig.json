@@ -2,11 +2,13 @@
   "ts-node": {
     "files": true
   },
+  "ts-node-dev": {
+    "files": true
+  },
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
     "strict": true,
-
     "rootDir": "src",
     "outDir": "dist",
     "moduleResolution": "node",

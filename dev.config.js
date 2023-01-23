@@ -7,26 +7,29 @@ require('dotenv').config();
 module.exports = {
   apps: [
     {
-      name: 'scraper',
-      script: './src/services/scraper/index.ts',
-      watch: false,
-      interpreter: './node_modules/.bin/ts-node-dev',
-      node_args: '-r tsconfig-paths/register',
-      env: {
-        PORT: '5000',
-        NODE_ENV: 'development',
-        JSON_RPC_HTTP: process.env.JSON_RPC_HTTP,
-        JSON_RPC_WS: process.env.JSON_RPC_WS,
-      },
-    },
-    {
       name: 'core',
-      script: './dist/services/core/index.ts',
+      script: './src/services/core/index.ts',
       watch: false,
-      interpreter: './node_modules/.bin/ts-node-dev',
+      interpreter: './node_modules/.bin/ts-node',
       node_args: '-r tsconfig-paths/register ./src/services/core/index.ts',
       env: {
         PORT: '5001',
+        NODE_ENV: 'development',
+        JSON_RPC_HTTP: process.env.JSON_RPC_HTTP,
+        JSON_RPC_WS: process.env.JSON_RPC_WS,
+        USER_NAME: process.env.USER_NAME,
+        DATABASE_NAME: process.env.DATABASE_NAME,
+        HOST: 'db',
+      },
+    },
+    {
+      name: 'scraper',
+      script: './src/services/scraper/index.ts',
+      watch: false,
+      interpreter: './node_modules/.bin/ts-node',
+      node_args: '-r tsconfig-paths/register ./src/services/scraper/index.ts',
+      env: {
+        PORT: '5000',
         NODE_ENV: 'development',
         JSON_RPC_HTTP: process.env.JSON_RPC_HTTP,
         JSON_RPC_WS: process.env.JSON_RPC_WS,

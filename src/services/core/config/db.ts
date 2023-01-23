@@ -1,17 +1,15 @@
 import { DataSource } from 'typeorm';
 
-import { Receipt } from '@core/entities/index.entities';
-
+import { Receipt, Transaction } from '@core/entities/index.entities';
 const initDB = async () => {
   try {
     const connection = new DataSource({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
+      host: process.env.HOST || 'localhost',
       username: process.env.USER_NAME,
-      password: undefined,
+      password: process.env.PG_PASS,
       database: process.env.DATABASE_NAME,
-      entities: [Receipt],
+      entities: [Receipt, Transaction],
       synchronize: true,
     });
 

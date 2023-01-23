@@ -12,7 +12,7 @@ NodeClient.init(process.env.JSON_RPC_HTTP as string, process.env.JSON_RPC_WS as 
 // NodeClient must be initialised before initialising the server (if testing only in this repo)
 const wss = WSS.init();
 
-const PORT = process.env.PORT || 5000;
+const PORT = 8000;
 
 let options = {};
 const server = createServer(options, app);

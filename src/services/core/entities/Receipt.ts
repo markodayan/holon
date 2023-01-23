@@ -2,36 +2,37 @@ import { Entity, BaseEntity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity('receipt')
 class Receipt extends BaseEntity {
-  // 66 = 64 length (32 bytes) + 2 for '0x'
   @PrimaryColumn({
     unique: true,
     length: 66,
   })
-  transaction_hash: string;
+  transactionHash: string;
+  // 66 = 64 length (32 bytes) + 2 for '0x'
 
   @Column()
-  block_number: number;
+  blockNumber: number;
+
+  @Column({ nullable: true })
+  contractAddress: string;
 
   @Column()
-  contract_address: string | null;
+  cumulativeGasUsed: number;
 
   @Column()
-  cumulative_gas_used: number;
-
-  @Column()
-  effective_gas_price: number;
+  effectiveGasPrice: number;
 
   @Column()
   from: string;
 
   @Column()
-  gas_used: number;
+  gasUsed: number;
+
+  @Column('simple-array', { nullable: true })
+  logs: string[];
+  // logs: TransactionLogItem[];
 
   @Column()
-  logs: TransactionLogItem[];
-
-  @Column()
-  logs_bloom: string;
+  logsBloom: string;
 
   @Column()
   status: string;
@@ -40,7 +41,7 @@ class Receipt extends BaseEntity {
   to: string;
 
   @Column()
-  transaction_index: number;
+  transactionIndex: number;
 
   @Column()
   type: number;
