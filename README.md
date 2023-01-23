@@ -1,4 +1,6 @@
-# URS (Untitled Rollup Service) Backend Subsystem
+b# URS (Untitled Rollup Service) Backend Subsystem
+
+> This is a sub-component of an on-going project called <b>Untitled Rollup Service</b>. [See here for more details!](https://hackmd.io/O93wObfUS0af7nhLv0EW5A)
 
 Two services running alongside one another in a shared docker container, these services are:
 
