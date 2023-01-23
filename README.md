@@ -1,4 +1,4 @@
-b# URS (Untitled Rollup Service) Backend Subsystem
+# URS (Untitled Rollup Service) Backend Subsystem
 
 > This is a sub-component of an on-going project called <b>Untitled Rollup Service</b>. [See here for more details!](https://hackmd.io/O93wObfUS0af7nhLv0EW5A)
 
