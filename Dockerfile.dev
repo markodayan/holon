@@ -13,7 +13,7 @@ RUN apk add busybox-extras
 # Bundle app source
 COPY . .
 
-# expose PostgreSQL and Redis ports to container
-EXPOSE 6379 5432
+# expose PostgreSQL, Redis, Ethereum EC ports to container
+EXPOSE 6379 5432 8545 8546
 CMD [ "pm2-runtime", "start", "dev.config.js"]
 
