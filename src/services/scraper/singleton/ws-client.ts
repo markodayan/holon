@@ -16,12 +16,12 @@ class NodeClient {
 
   private ping(_ws: WebSocket) {}
 
-  public static init(http_url: string, ws_url: string): WebSocket {
+  public static init(http_url: string, ws_url: string): NodeClient {
     if (!this.instance) {
       this.instance = new NodeClient(http_url, ws_url);
     }
 
-    return this.instance.ws;
+    return this.instance;
   }
 
   private constructor(http_url: string, ws_url: string) {
@@ -30,7 +30,7 @@ class NodeClient {
     this.wss = WSS.init();
   }
 
-  private initWS(url: string) {
+  public initWS(url: string) {
     this.ws = new WebSocket(url);
     this.prev = Date.now();
 
@@ -63,6 +63,7 @@ class NodeClient {
           if (ws.readyState === WebSocket.OPEN) {
             /* TODO: At this point we will fire off the message handler to prepare whatever data we are about to broadcast to clients */
             // sendClientMessage(ws: WebSocket)
+            console.log('message received from Ethereum at ', new Date());
             ws.send(JSON.stringify(raw));
           }
 
@@ -76,6 +77,18 @@ class NodeClient {
     });
 
     console.log(`Node client WS connection initialised...`);
+  }
+
+  public checkProvider() {
+    const check = Date.now() - this.prev;
+
+    // 2 minutes set for now (120 000), adjust to (60 000)
+    if (this.ws && check > 60000) {
+      console.log(`Time since last update received: ${check} ms | ${utils.minutes(check)} minutes`);
+      console.log(`Execution client connection hanging. Resubscribing to node...`);
+      this.ws.close();
+      this.initWS(process.env.JSON_RPC_WS as string);
+    }
   }
 }
 

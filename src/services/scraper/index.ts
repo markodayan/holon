@@ -1,4 +1,5 @@
 import { createServer } from 'http';
+import schedule from 'node-schedule';
 import { parse } from 'url';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -7,15 +8,19 @@ import { WSS } from '@scraper/singleton/ws-server';
 import { NodeClient } from '@scraper/singleton/ws-client';
 import { app } from '@scraper/app';
 
-NodeClient.init(process.env.JSON_RPC_HTTP as string, process.env.JSON_RPC_WS as string);
-
-// NodeClient must be initialised before initialising the server (if testing only in this repo)
+const node = NodeClient.init(process.env.JSON_RPC_HTTP as string, process.env.JSON_RPC_WS as string);
 const wss = WSS.init();
 
 const PORT = 8000;
 
 let options = {};
 const server = createServer(options, app);
+
+// Execute every minute
+schedule.scheduleJob(`*/1 * * * *`, async () => {
+  // Check execution client subscription is not hanging
+  node.checkProvider();
+});
 
 server.on('upgrade', function (request, socket, head) {
   const { pathname } = parse(request.url as string);
@@ -32,7 +37,7 @@ setInterval(() => {
   wss.clients.forEach((client) => {
     client.send(JSON.stringify({ type: 'ping' }));
   });
-}, 1000);
+}, 60000); // testing 60 seconds
 
 server.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}!`);
