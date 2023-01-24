@@ -11,10 +11,11 @@ services:
     ports:
       - '5433:5432'
   backend:
-    # image: urs-backend
     build:
       context: .
       dockerfile: Dockerfile.dev
+    extra_hosts:
+      - ${HOST_LABEL}:${HOST_IP_ADDR}
     depends_on:
       - db
     ports:

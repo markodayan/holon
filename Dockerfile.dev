@@ -7,13 +7,13 @@ COPY package*.json ./
 RUN npm install pm2 -g
 RUN npm install
 
-# RUN apk --no-cache add curl
+RUN apk --no-cache add curl
 RUN apk add busybox-extras
 
 # Bundle app source
 COPY . .
 
 # expose PostgreSQL, Redis, Ethereum EC ports to container
-EXPOSE 6379 5432 8545 8546
+EXPOSE 6379 5432 
 CMD [ "pm2-runtime", "start", "dev.config.js"]
 
