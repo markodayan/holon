@@ -1,4 +1,5 @@
 declare interface RawTransactionBody {
+  accessList?: string[];
   blockHash: string;
   blockNumber: string;
   chainId: string;
@@ -7,6 +8,8 @@ declare interface RawTransactionBody {
   gasPrice: string;
   hash: string;
   input: string;
+  maxFeePerGas?: string;
+  maxPriorityFeePerGas?: string;
   nonce: string;
   r: string;
   s: string;

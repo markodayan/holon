@@ -1,4 +1,5 @@
 declare interface TransactionBody {
+  accessList?: string[];
   blockHash: string;
   blockNumber: number; // conversion
   chainId: number;
@@ -7,6 +8,8 @@ declare interface TransactionBody {
   gasPrice: number; // conversion
   hash: string;
   input: string;
+  maxFeePerGas?: number; // conversion
+  maxPriorityFeePerGas?: number; // conversion
   nonce: string;
   r: string;
   s: string;

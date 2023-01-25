@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import { Provider, utils } from 'noob-ethereum';
 import { WSS } from '@scraper/singleton/ws-server';
-import { fetchJSONRPCDetails } from '@scraper/utils';
+import { fetchJSONRPCDetails, parseBlockTransactions } from '@scraper/utils';
 
 /**
  * JSON-RPC WS client listening to the Ethereum full node for new header events
@@ -36,12 +36,12 @@ class NodeClient {
     this.prev = Date.now();
 
     this.ws.on('open', () => {
-      console.log(`Node client WS connection opened`);
+      console.log(`Scraper client WS connection opened`);
       this.ws.send('{"jsonrpc":"2.0","method":"eth_subscribe","params":["newHeads"], "id":1}');
     });
 
     this.ws.on('close', () => {
-      console.error(`Node client websocket closing...`);
+      console.error(`Scraper client websocket closing...`);
     });
 
     this.ws.on('error', (err) => {
@@ -59,13 +59,14 @@ class NodeClient {
       if (data?.method) {
         // Fetch latest block body corresponding to block header received from full node ws connection
         const raw = await this.provider.getLatestBlock(true);
+        const transactions = await parseBlockTransactions(raw.transactions as RawTransactionBody[]);
 
         this.wss.clients.forEach((ws: WebSocket) => {
           if (ws.readyState === WebSocket.OPEN) {
             /* TODO: At this point we will fire off the message handler to prepare whatever data we are about to broadcast to clients */
             // sendClientMessage(ws: WebSocket)
             console.log('message received from Ethereum at ', new Date());
-            ws.send(JSON.stringify(raw));
+            ws.send(JSON.stringify(transactions));
           }
 
           // @ts-ignore // ws types error
@@ -77,7 +78,7 @@ class NodeClient {
       }
     });
 
-    console.log(`Node client WS connection initialised...`);
+    console.log(`Scraper client WS connection initialised...`);
   }
 
   public checkProvider() {
@@ -86,7 +87,7 @@ class NodeClient {
     // 2 minutes set for now (120 000), adjust to (60 000)
     if (this.ws && check > 60000) {
       console.log(`Time since last update received: ${check} ms | ${utils.minutes(check)} minutes`);
-      console.log(`Execution client connection hanging. Resubscribing to node...`);
+      console.log(`Execution client connection hanging. Reinitialising Scraper client...`);
       this.ws.close();
 
       const { http_url, ws_url } = fetchJSONRPCDetails();
