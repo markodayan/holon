@@ -1,6 +1,7 @@
 import WebSocket from 'ws';
 import { Provider, utils } from 'noob-ethereum';
-import { WSS } from './ws-server';
+import { WSS } from '@scraper/singleton/ws-server';
+import { fetchJSONRPCDetails } from '@scraper/utils';
 
 /**
  * JSON-RPC WS client listening to the Ethereum full node for new header events
@@ -87,7 +88,10 @@ class NodeClient {
       console.log(`Time since last update received: ${check} ms | ${utils.minutes(check)} minutes`);
       console.log(`Execution client connection hanging. Resubscribing to node...`);
       this.ws.close();
-      this.initWS(process.env.JSON_RPC_WS as string);
+
+      const { http_url, ws_url } = fetchJSONRPCDetails();
+
+      this.initWS(ws_url as string);
     }
   }
 }

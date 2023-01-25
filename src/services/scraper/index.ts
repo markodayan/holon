@@ -7,8 +7,11 @@ dotenv.config();
 import { WSS } from '@scraper/singleton/ws-server';
 import { NodeClient } from '@scraper/singleton/ws-client';
 import { app } from '@scraper/app';
+import { fetchJSONRPCDetails } from '@scraper/utils';
 
-const node = NodeClient.init(process.env.JSON_RPC_HTTP as string, process.env.JSON_RPC_WS as string);
+const { http_url, ws_url } = fetchJSONRPCDetails();
+
+const node = NodeClient.init(http_url as string, ws_url as string);
 const wss = WSS.init();
 
 const PORT = 8000;
