@@ -15,7 +15,7 @@ An Ethereum full node is required to be running on the same machine as this serv
 
 <br>
 
-> <b>In order for URS to work, you are required to change the address of the execution client from localhost to `0.0.0.0`.</b>
+> <b>In order for URS to work, you are required to change the address of the execution client from localhost to `0.0.0.0`.</b> This therefore means that the JSON-RPC HTTP interface is accessible on http://0.0.0.0/8545 , while the JSON-RPC WS interface is accessible on `ws://0.0.0.0/8546`
 
 <br>
 
