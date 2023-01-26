@@ -1,11 +1,13 @@
-# Untitled Rollup Service (URS)
+# URS (Untitled Rollup Service) Backend Subsystem
 
-> Untitled Rollup Service (URS) is a software service that runs on a host machine alongside an Ethereum full node - [See here for more details](https://hackmd.io/O93wObfUS0af7nhLv0EW5A).
+> This is a sub-component of an on-going project called <b>Untitled Rollup Service</b>. [See here for more details!](https://hackmd.io/O93wObfUS0af7nhLv0EW5A)
 
-The URS architecture consists of 2 sub-systems namely:
+Two services running alongside one another in a shared docker container, these services are:
 
-- `engine` subsystem (comprising of `scraper` and `core` PM2 services as well as a `db` and `cache` container for data store servers)
-- `app` subsystem (comprising of the `api` and `client` services)
+- `scraper`
+- `core`
+
+The `scraper` communicates directly with an Ethereum execution client to stream incoming block header data as well as being capable of performing historical blockchain queries. This service drives the activity of the `core` service. The `core` service receives data from the `scraper` service, applies processing and updates persistant and caching data stores to serve the API and presentation layers of URS.
 
 ## Pre-requisites
 

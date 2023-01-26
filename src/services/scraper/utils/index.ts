@@ -26,7 +26,7 @@ function parseBlockTransactions(raw: RawTransactionBody[]): TransactionBody[] {
       gasPrice: utils.toGwei(t.gasPrice, 'wei') as number,
       hash: t.hash,
       input: t.input,
-      nonce: t.nonce,
+      nonce: utils.decimal(t.nonce),
       r: t.r,
       s: t.s,
       to: t.to,

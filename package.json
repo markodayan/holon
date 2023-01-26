@@ -1,7 +1,7 @@
 {
-  "name": "urs-backend",
+  "name": "untitled-rollup-servicce",
   "version": "1.0.0",
-  "description": "URS backend subsystem consisting of scraper and core services, to be hosted in a Docker container",
+  "description": "Untitled Rollup Service (URS) to run on a host machine alongside an Ethereum full node.",
   "main": "main.js",
   "scripts": {
     "compose": "HOST_IP_ADDR=$(node scripts/ip.js) docker compose up -d --build",

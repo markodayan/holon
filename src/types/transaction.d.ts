@@ -10,7 +10,7 @@ declare interface TransactionBody {
   input: string;
   maxFeePerGas?: number; // conversion
   maxPriorityFeePerGas?: number; // conversion
-  nonce: string;
+  nonce: number; // conversion
   r: string;
   s: string;
   to: string;

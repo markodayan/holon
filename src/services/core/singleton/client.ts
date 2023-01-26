@@ -28,8 +28,12 @@ class CoreClient {
     });
 
     this.ws.on('message', (res: string) => {
-      console.log('message received from scraper at ', new Date());
-      console.log(JSON.parse(res));
+      const message = JSON.parse(res);
+
+      if (Array.isArray(message)) {
+        console.log('message received from scraper at ', new Date());
+        console.log(message);
+      }
     });
 
     console.log(`Core client WS connection initialised...`);
