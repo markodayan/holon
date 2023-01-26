@@ -10,7 +10,7 @@ services:
       - ${DB_HOST_PATH}:${DB_CONTAINER_PATH}
     ports:
       - '5433:5432'
-  backend:
+  engine:
     build:
       context: .
       dockerfile: Dockerfile.dev
