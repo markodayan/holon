@@ -1,5 +1,9 @@
 version: '3.9'
 services:
+  cache:
+    image: redis
+    ports:
+      - '6379:6379'
   db:
     image: postgres
     environment:
@@ -20,6 +24,7 @@ services:
       - ${HOST_LABEL}:${HOST_IP_ADDR}
     depends_on:
       - db
+      - cache
     ports:
       - '5000:8000'
       - '5001:8001'

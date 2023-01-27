@@ -5,7 +5,7 @@ const initDB = async () => {
   try {
     const connection = new DataSource({
       type: 'postgres',
-      host: process.env.HOST || 'localhost',
+      host: process.env.DB_HOST || 'localhost', // 'db' (host name for postgres container)
       username: process.env.USER_NAME,
       password: process.env.PG_PASS,
       database: process.env.DATABASE_NAME,

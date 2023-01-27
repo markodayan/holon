@@ -19,7 +19,7 @@ module.exports = {
         JSON_RPC_WS: process.env.JSON_RPC_WS,
         USER_NAME: process.env.USER_NAME,
         DATABASE_NAME: process.env.DATABASE_NAME,
-        HOST: 'db',
+        DB_HOST: 'db',
       },
     },
     {
@@ -33,6 +33,7 @@ module.exports = {
         NODE_ENV: 'development',
         JSON_RPC_HTTP: process.env.JSON_RPC_HTTP,
         JSON_RPC_WS: process.env.JSON_RPC_WS,
+        DB_HOST: 'db',
       },
     },
   ],
