@@ -5,6 +5,11 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 RUN npm install pm2 -g
+RUN pm2 install pm2-logrotate
+RUN pm2 set pm2-logrotate:max_size 50M
+RUN pm2 set pm2-logrotate:retain 10
+RUN pm2 set pm2-logrotate:compress true
+
 RUN npm install
 
 RUN apk --no-cache add curl
