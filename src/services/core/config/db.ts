@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 
-import { Receipt, Transaction } from '@core/entities/index.entities';
+import { Receipt, Transaction, FullTransactionView } from '@core/entities/index.entities';
 const initDB = async () => {
   try {
     const connection = new DataSource({
@@ -9,7 +9,7 @@ const initDB = async () => {
       username: process.env.USER_NAME,
       password: process.env.PG_PASS,
       database: process.env.DATABASE_NAME,
-      entities: [Receipt, Transaction],
+      entities: [Receipt, Transaction, FullTransactionView],
       synchronize: true,
     });
 
