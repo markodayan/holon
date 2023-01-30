@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 
-import { Receipt, Transaction } from '@core/entities/index.entities';
+import * as entities from '@core/entities/index.entities';
 import { Cache } from '@core/singleton/cache';
 
 const initDataStores = async () => {
@@ -11,7 +11,7 @@ const initDataStores = async () => {
       username: process.env.USER_NAME,
       password: process.env.PG_PASS,
       database: process.env.DATABASE_NAME,
-      entities: [Receipt, Transaction],
+      entities: [...Object.values(entities)],
       synchronize: true,
     });
 
