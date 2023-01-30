@@ -4,13 +4,22 @@ import { parse } from 'url';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+/* PostgreSQL connection method */
+import { initDB } from '@scraper/config/db';
+
+/* Singletons */
 import { WSS } from '@scraper/singleton/ws-server';
 import { NodeClient } from '@scraper/singleton/ws-client';
+import { Cache } from '@scraper/singleton/cache';
+
 import { app } from '@scraper/app';
 import { fetchJSONRPCDetails } from '@scraper/utils';
 
 const { http_url, ws_url } = fetchJSONRPCDetails();
 
+/* Initialisations */
+const cache = Cache.getInstance();
+initDB();
 const node = NodeClient.init(http_url as string, ws_url as string);
 const wss = WSS.init();
 

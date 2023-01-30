@@ -20,23 +20,23 @@ class CoreClient {
     this.ws = new WebSocket(url);
 
     this.ws.on('open', () => {
-      console.log(`Core client WS connection opened`);
+      console.log(`[core] Core client WS connection opened`);
     });
 
     this.ws.on('close', () => {
-      console.error(`Core client websocket closing...`);
+      console.error(`[core] Core client websocket closing...`);
     });
 
     this.ws.on('message', (res: string) => {
       const message = JSON.parse(res);
 
       if (Array.isArray(message)) {
-        console.log('message received from scraper at ', new Date());
-        console.log(message);
+        console.log('[core] message received from scraper at ', new Date());
+        // console.log(message);
       }
     });
 
-    console.log(`Core client WS connection initialised...`);
+    console.log(`[core] Core client WS connection initialised...`);
   }
 }
 

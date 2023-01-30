@@ -36,16 +36,16 @@ class NodeClient {
     this.prev = Date.now();
 
     this.ws.on('open', () => {
-      console.log(`Scraper client WS connection opened`);
+      console.log(`[scraper] Scraper client WS connection opened`);
       this.ws.send('{"jsonrpc":"2.0","method":"eth_subscribe","params":["newHeads"], "id":1}');
     });
 
     this.ws.on('close', () => {
-      console.error(`Scraper client websocket closing...`);
+      console.error(`[scraper] Scraper client websocket closing...`);
     });
 
     this.ws.on('error', (err) => {
-      console.error(`Error with node client webosckets connection`, err);
+      console.error(`[scraper] Error with node client webosckets connection`, err);
     });
 
     this.ws.on('message', async (res: string) => {
@@ -65,7 +65,7 @@ class NodeClient {
           if (ws.readyState === WebSocket.OPEN) {
             /* TODO: At this point we will fire off the message handler to prepare whatever data we are about to broadcast to clients */
             // sendClientMessage(ws: WebSocket)
-            console.log('message received from Ethereum at ', new Date());
+            console.log('[scraper] message received from Ethereum at ', new Date());
             ws.send(JSON.stringify(transactions));
           }
 
@@ -78,7 +78,7 @@ class NodeClient {
       }
     });
 
-    console.log(`Scraper client WS connection initialised...`);
+    console.log(`[scraper] Scraper client WS connection initialised...`);
   }
 
   public checkProvider() {

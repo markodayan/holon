@@ -1,4 +1,5 @@
-import { Entity, BaseEntity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, BaseEntity, Column, PrimaryColumn, OneToOne, JoinColumn } from 'typeorm';
+import Receipt from './Receipt';
 
 @Entity()
 export class Transaction extends BaseEntity {

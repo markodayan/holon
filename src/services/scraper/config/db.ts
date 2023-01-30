@@ -14,10 +14,10 @@ const initDB = async () => {
     });
 
     await connection.initialize();
-    console.log('[core] Connected to Postgres');
+    console.log('[scraper] Connected to Postgres');
   } catch (err) {
     console.error(err);
-    throw new Error('[core] Unable to connect to db');
+    throw new Error('[scraper] Unable to connect to db');
   }
 };
 
