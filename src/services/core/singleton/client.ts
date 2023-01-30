@@ -13,7 +13,8 @@ class CoreClient {
   }
 
   private constructor(ws_url: string) {
-    this.initWS(ws_url);
+    /* Give the scraper websocket server time to initialise */
+    setTimeout(() => this.initWS(ws_url), 5000);
   }
 
   public initWS(url: string) {

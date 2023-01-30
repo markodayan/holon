@@ -31,21 +31,21 @@ class NodeClient {
     this.wss = WSS.init();
   }
 
-  public initWS(url: string) {
+  public async initWS(url: string) {
     this.ws = new WebSocket(url);
     this.prev = Date.now();
 
     this.ws.on('open', () => {
-      console.log(`[scraper] Scraper client WS connection opened`);
+      console.log(`[scraper] Ethereum client WS connection established`);
       this.ws.send('{"jsonrpc":"2.0","method":"eth_subscribe","params":["newHeads"], "id":1}');
     });
 
     this.ws.on('close', () => {
-      console.error(`[scraper] Scraper client websocket closing...`);
+      console.error(`[scraper] Ethereum client WS connection closing...`);
     });
 
     this.ws.on('error', (err) => {
-      console.error(`[scraper] Error with node client webosckets connection`, err);
+      console.error(`[scraper] Error with Ethereum client WS connection`, err);
     });
 
     this.ws.on('message', async (res: string) => {
@@ -86,8 +86,8 @@ class NodeClient {
 
     // 2 minutes set for now (120 000), adjust to (60 000)
     if (this.ws && check > 60000) {
-      console.log(`Time since last update received: ${check} ms | ${utils.minutes(check)} minutes`);
-      console.log(`Execution client connection hanging. Reinitialising Scraper client...`);
+      console.log(`[scraper] Time since last block update received: ${check} ms | ${utils.minutes(check)} minutes`);
+      console.log(`[scraper] Ethereum client WS connection hanging. Reinitialising Ethereum client WS connection...`);
       this.ws.close();
 
       const { http_url, ws_url } = fetchJSONRPCDetails();
