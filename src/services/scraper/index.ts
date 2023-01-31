@@ -52,4 +52,10 @@ initDataStores().then(() => {
   server.listen(PORT, () => {
     console.log(`[scraper] Server running in ${process.env.NODE_ENV} mode on port ${PORT}!`);
   });
+
+  process.on('SIGINT', function () {
+    server.close((err) => {
+      process.exit(err ? 1 : 0);
+    });
+  });
 });

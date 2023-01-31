@@ -12,7 +12,7 @@ const initDataStores = async () => {
       password: process.env.PG_PASS,
       database: process.env.DATABASE_NAME,
       entities: [...Object.values(entities)],
-      synchronize: true,
+      synchronize: false,
     });
 
     await connection.initialize();

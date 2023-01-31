@@ -1,7 +1,8 @@
 import Receipt from './Receipt';
 import Transaction from './Transaction';
-import RollupRegistry from './RollupRegistry';
+import Rollup from './Rollup';
+import Address from './Address';
 import Constraints from './Constaints';
 import ScraperPreferences from './ScraperPreferences';
 
-export { Receipt, Transaction, RollupRegistry, Constraints, ScraperPreferences };
+export { Receipt, Transaction, Rollup, Address, Constraints, ScraperPreferences };
