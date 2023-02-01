@@ -1,0 +1,1 @@
+sleep 5 && db_name=$POSTGRES_DB && psql "host=$HOST_IP_ADDR port=5432 user=$POSTGRES_USER password=$POSTGRES_PASSWORD" -tc "SELECT 1 from pg_database WHERE datname = '$db_name'" | grep -q 1 || psql "host=$HOST_IP_ADDR port=5432 user=$POSTGRES_USER password=$POSTGRES_PASSWORD" -c "CREATE DATABASE $db_name"

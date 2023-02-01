@@ -1,20 +1,37 @@
 version: '3.9'
 services:
   cache:
+    container_name: cache
     image: redis
     ports:
       - '6379:6379'
   db:
+    container_name: db
     image: postgres
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
-      POSTGRES_DB: urs-test-1
+      POSTGRES_DB: ${DATABASE_NAME}
     volumes:
       - ${DB_HOST_PATH}:${DB_CONTAINER_PATH}
     ports:
       - '5432:5432'
+  db_setup:
+    container_name: db_setup
+    image: postgres
+    volumes:
+      - ./scripts/init_db.sh:/usr/src/init_db.sh
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: ${DATABASE_NAME}
+      HOST_IP_ADDR: ${HOST_IP_ADDR}
+    depends_on:
+      - db
+    restart: 'no'
+    command: /usr/src/init_db.sh
   engine:
+    container_name: engine
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -23,8 +40,7 @@ services:
     extra_hosts:
       - ${HOST_LABEL}:${HOST_IP_ADDR}
     depends_on:
-      - db
-      - cache
+      - db_setup
     ports:
       - '5000:8000'
       - '5001:8001'
