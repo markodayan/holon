@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 
-import * as entities from '@core/entities/index.entities';
-import { Cache } from '@scraper/singleton/cache';
+import * as entities from '@db/entities/index.entities';
+import { Cache } from '@core/singleton/cache';
 
 const initDataStores = async () => {
   try {
@@ -12,23 +12,23 @@ const initDataStores = async () => {
       password: process.env.PG_PASS,
       database: process.env.DATABASE_NAME,
       entities: [...Object.values(entities)],
-      synchronize: false,
+      synchronize: true,
     });
 
     await connection.initialize();
-    console.log('[scraper] Connected to Postgres');
+    console.log('[core] Connected to Postgres');
     const cache = Cache.getInstance();
 
     await new Promise((resolve) => {
       while (!cache.isOpen) {
-        console.log('[scraper] Redis connection not open yet');
+        console.log('[core] Redis connection not open yet');
       }
 
       resolve(cache);
     });
   } catch (err) {
     console.error(err);
-    throw new Error('[scraper] Unable to connect to db');
+    throw new Error('[core] Unable to connect to db');
   }
 };
 

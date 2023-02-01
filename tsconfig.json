@@ -24,7 +24,8 @@
     "baseUrl": "./",
     "paths": {
       "@scraper/*": ["src/services/scraper/*"],
-      "@core/*": ["src/services/core/*"]
+      "@core/*": ["src/services/core/*"],
+      "@db/*": ["src/db/*"]
     }
   },
   "exclude": ["junk"]

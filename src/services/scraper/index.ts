@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 /* PostgreSQL connection method */
-import { initDataStores } from '@scraper/config/db';
+import { initDataStores } from '@db/index';
 
 /* Singletons */
 import { NodeClient } from '@scraper/singleton/ws-client';
