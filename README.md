@@ -42,17 +42,22 @@ touch .env
 
 In the root directory you will find a `.prod.env` file, copy the contents into the `.env` file:
 
-```bash
+```yaml
+# Your host machine's network across which the service will run
 HOST_LABEL=node
 
 # PostgreSQL environment variables
 USER_NAME=postgres
-DATABASE_NAME=urs-test-1
+DATABASE_NAME=untitled_rollup_service
 PG_PASS=postgres
 
 # Docker environment variables
-DB_HOST_PATH=
+DB_HOST_PATH=<enter desired path on machine>
 DB_CONTAINER_PATH=/var/lib/postgresql/data
+
+# Host Names (Containers)
+DB_HOST=db
+CACHE_HOST=cache
 
 ```
 

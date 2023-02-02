@@ -9,9 +9,10 @@ services:
     container_name: db
     image: postgres
     environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_DB: ${PG_DB}
+      HOST_IP_ADDR: ${HOST_IP_ADDR}
     volumes:
       - ${DB_HOST_PATH}:${DB_CONTAINER_PATH}
     ports:
@@ -22,9 +23,9 @@ services:
     volumes:
       - ./scripts/init_db.sh:/usr/src/init_db.sh
     environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_DB: ${PG_DB}
       HOST_IP_ADDR: ${HOST_IP_ADDR}
     depends_on:
       - db

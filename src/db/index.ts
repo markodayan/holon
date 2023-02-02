@@ -8,9 +8,9 @@ const initDataStores = async () => {
     const connection = new DataSource({
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost', // 'db' (host name for postgres container)
-      username: process.env.USER_NAME,
+      username: process.env.PG_USER,
       password: process.env.PG_PASS,
-      database: process.env.DATABASE_NAME,
+      database: process.env.PG_DB,
       entities: [...Object.values(entities)],
       synchronize: true,
     });
