@@ -17,30 +17,8 @@ setTimeout(async () => {
   CoreClient.init(`ws://${host}:5000/eth`);
 
   await initDataStores();
-  await initOptimism(EOA_MAP, CONTRACT_MAP, RELATIONSHIPS);
-
-  // const ctc = await createAccount(
-  //   '0x5e4e65926ba27467555eb562121fac00d24e9dd2',
-  //   'CanonicalTransactionChain',
-  //   'Optimism L2 batches posted here by sequencer',
-  //   true,
-  //   optimism
-  // );
-
-  // const sequencer = await createAccount(
-  //   '0x6887246668a3b87f54deb3b94ba47a6f63f32985',
-  //   'OptimismSequencer',
-  //   'Sequencer EOA posting batches to Ethereum',
-  //   false,
-  //   optimism
-  // );
-
-  // const flow = Flow.create({
-  //   from: sequencer,
-  //   to: ctc,
-  // });
-
-  // await flow.save();
+  // await seedOptimism(EOA_MAP, CONTRACT_MAP, RELATIONSHIPS);
+  // fetchOptimismFlows(); /* only works if migrations and seeders were run in expected fashion (TODO: set up those tasks) */
 }, 5000);
 
 async function createRollup(label: string, description: string) {
@@ -80,7 +58,7 @@ async function createTransactionFlow(from: Account, to: Account) {
   await flow.save();
 }
 
-async function initOptimism(eoaMap: any, contractMap: any, relationships: any) {
+async function seedOptimism(eoaMap: any, contractMap: any, relationships: any) {
   // create rollup row
   const optimism = await createRollup('Optimism', 'Optimistic rollup developed by Optimism');
 
@@ -104,4 +82,13 @@ async function initOptimism(eoaMap: any, contractMap: any, relationships: any) {
   for (const r of relationships) {
     await createTransactionFlow(r.from, r.to);
   }
+}
+
+async function fetchOptimismFlows() {
+  const flows = await Flow.createQueryBuilder('flow')
+    .leftJoinAndSelect('flow.from', 'from')
+    .leftJoinAndSelect('flow.to', 'to')
+    .getMany();
+
+  // console.log(flows);
 }

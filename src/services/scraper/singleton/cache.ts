@@ -1,4 +1,4 @@
-import { RedisClientType } from '@redis/client/dist/lib/client';
+import { RedisClientType } from '@redis/client';
 import { createClient } from 'redis';
 
 class Cache {

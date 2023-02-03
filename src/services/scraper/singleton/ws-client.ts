@@ -1,7 +1,10 @@
 import WebSocket from 'ws';
-import { Provider, utils } from 'noob-ethereum';
+import { Provider, utils, RLP as rlp } from 'noob-ethereum';
 import { WSS } from '@scraper/singleton/ws-server';
 import { fetchJSONRPCDetails, parseBlockTransactions } from '@scraper/utils';
+import Flow from '@db/entities/Flow';
+import { Cache } from '@scraper/singleton/cache';
+import { RedisClientType } from '@redis/client';
 
 /**
  * JSON-RPC WS client listening to the Ethereum full node for new header events
@@ -9,8 +12,11 @@ import { fetchJSONRPCDetails, parseBlockTransactions } from '@scraper/utils';
 class NodeClient {
   private static instance: NodeClient;
   private ws: WebSocket; // JSON-RPC WS provider link to full node
+  private cache: RedisClientType; // Redis client instance
   public provider: Provider; // JSON-RPC HTTP provider link to full node
   public wss: WebSocket.Server; // Custom WebSockets server to deliver messages to other microservices
+  // public flows: Flow[]; // the interactions that will be scanned for
+  public flows: any[] = [];
 
   public prev: number;
   public latest: number;
@@ -26,9 +32,12 @@ class NodeClient {
   }
 
   private constructor(http_url: string, ws_url: string) {
+    this.cache = Cache.getInstance();
     this.provider = Provider.init(http_url);
     this.initWS(ws_url);
     this.wss = WSS.init();
+
+    this.cacheFlows();
   }
 
   public async initWS(url: string) {
@@ -64,9 +73,10 @@ class NodeClient {
         this.wss.clients.forEach((ws: WebSocket) => {
           if (ws.readyState === WebSocket.OPEN) {
             /* TODO: At this point we will fire off the message handler to prepare whatever data we are about to broadcast to clients */
-            // sendClientMessage(ws: WebSocket)
+
             console.log('[scraper] message received from Ethereum at ', new Date());
-            ws.send(JSON.stringify(transactions));
+            let filtered = this.searchTransactions(transactions);
+            ws.send(JSON.stringify(filtered));
           }
 
           // @ts-ignore // ws types error
@@ -79,6 +89,82 @@ class NodeClient {
     });
 
     console.log(`[scraper] Scraper client WS connection initialised...`);
+  }
+
+  /* Over a block of transactions, check for each flow */
+  private async searchTransactions(transactions: TransactionBody[]) {
+    let result: any = [];
+
+    this.flows.forEach((flow) => {
+      let id = flow.id;
+      let src_addr = JSON.parse(flow.from).address;
+      let dest_addr = JSON.parse(flow.to).address;
+
+      result = [
+        ...result,
+        ...transactions
+          .filter((tx: TransactionBody) => tx.from === src_addr && tx.to === dest_addr)
+          .map((t: TransactionBody) => ({
+            id,
+            hash: t.hash,
+          })),
+      ];
+    });
+
+    console.log('matched transactions:', result);
+    return result;
+  }
+
+  /* TODO: cache the flow rows collected  */
+  /* TODO: update wss message format to distinguish what transaction is being sent to 'core' via WebSockets  */
+  /* TODO: request receipt for tx body that satisfies flow constraint */
+  public async cacheFlows() {
+    try {
+      const flows: Flow[] = await Flow.createQueryBuilder('flow')
+        .leftJoinAndSelect('flow.from', 'from')
+        .leftJoinAndSelect('flow.to', 'to')
+        .getMany();
+
+      for (const f of flows) {
+        let key = `${f.from.label}:${f.to.label}`;
+
+        let from = JSON.stringify({
+          address: f.from.address,
+          label: f.from.label,
+          description: f.from.description,
+          is_contract: f.from.is_contract,
+        });
+
+        let to = JSON.stringify({
+          address: f.to.address,
+          label: f.to.label,
+          description: f.to.description,
+          is_contract: f.to.is_contract,
+        });
+
+        let value = JSON.stringify({
+          from,
+          to,
+        });
+
+        await this.cache.set(key, value);
+
+        this.flows = [
+          ...this.flows,
+          {
+            id: f.id,
+            from,
+            to,
+          },
+        ];
+      }
+
+      // let keys = await this.cache.keys('*');
+      // console.log('keys', keys);
+    } catch (err) {
+      console.error(err);
+      throw new Error('[scraper] cacheFlows() error');
+    }
   }
 
   public checkProvider() {
