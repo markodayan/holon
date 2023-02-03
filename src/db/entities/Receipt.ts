@@ -1,6 +1,6 @@
 import { Entity, BaseEntity, Column, PrimaryColumn } from 'typeorm';
 
-@Entity('receipt')
+@Entity('receipts')
 class Receipt extends BaseEntity {
   @PrimaryColumn({
     unique: true,

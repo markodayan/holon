@@ -45,6 +45,7 @@ services:
     ports:
       - '5000:8000'
       - '5001:8001'
+    command: /usr/src/app/scripts/wait_for_db.sh
 volumes:
   db:
     external: true

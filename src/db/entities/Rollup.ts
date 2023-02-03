@@ -7,9 +7,9 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import Address from './Address';
+import Account from './Account';
 
-@Entity()
+@Entity('rollups')
 class Rollup extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: number;
@@ -17,19 +17,15 @@ class Rollup extends BaseEntity {
   @Column({
     unique: true,
   })
-  name: string;
+  label: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   description: string;
 
-  @OneToMany(() => Address, (address) => address.rollup)
-  addresses: Address[];
-
-  @CreateDateColumn()
-  created?: Date;
-
-  @UpdateDateColumn()
-  updated: Date;
+  @OneToMany(() => Account, (account) => account.rollup)
+  accounts: Account[];
 }
 
 export default Rollup;

@@ -1,7 +1,7 @@
 import { Entity, BaseEntity, Column, PrimaryColumn, OneToOne, JoinColumn } from 'typeorm';
 import Receipt from './Receipt';
 
-@Entity()
+@Entity('transactions')
 export class Transaction extends BaseEntity {
   @PrimaryColumn({
     unique: true,
