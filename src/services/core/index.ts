@@ -14,9 +14,9 @@ setInterval(() => {}, 1 << 30);
 
 /* Give the scraper websocket server time to initialise */
 setTimeout(async () => {
+  await initDataStores();
   CoreClient.init(`ws://${host}:5000/eth`);
 
-  await initDataStores();
   // await seedOptimism(EOA_MAP, CONTRACT_MAP, RELATIONSHIPS);
   // fetchOptimismFlows(); /* only works if migrations and seeders were run in expected fashion (TODO: set up those tasks) */
 }, 5000);

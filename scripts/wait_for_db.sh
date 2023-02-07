@@ -1,2 +1,3 @@
-echo "Running wait script"
-sleep 5 && pm2-runtime start dev.config.js
+# echo "Running wait script"
+# sleep 5 && pm2-runtime start dev.config.js
+pm2-runtime start dev.config.js

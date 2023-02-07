@@ -18,6 +18,6 @@ RUN apk add busybox-extras
 # Bundle app source
 COPY . .
 
-EXPOSE 6379 5432 
+EXPOSE 6379 5432
 CMD [ "pm2-runtime", "start", "dev.config.js"]
 
