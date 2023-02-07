@@ -16,17 +16,20 @@ class Flow extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Account, (account) => account.address)
+  @ManyToOne(() => Account, (account) => account.address, { nullable: true })
   @JoinColumn({
     name: 'from_address',
   })
   from: Account;
 
-  @ManyToOne(() => Account, (account) => account.address)
+  @ManyToOne(() => Account, (account) => account.address, { nullable: true })
   @JoinColumn({
     name: 'to_address',
   })
   to: Account;
+
+  @Column({ nullable: true })
+  abi: string;
 }
 
 export default Flow;
