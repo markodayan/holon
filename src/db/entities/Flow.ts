@@ -10,6 +10,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import Account from './Account';
+import Transaction from './Transaction';
 
 @Entity('flows')
 class Flow extends BaseEntity {
@@ -30,6 +31,9 @@ class Flow extends BaseEntity {
 
   @Column({ nullable: true })
   abi: string;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.flow)
+  transactions: Transaction[];
 }
 
 export default Flow;

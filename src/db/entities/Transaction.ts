@@ -1,4 +1,5 @@
-import { Entity, BaseEntity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, BaseEntity, Column, PrimaryColumn, ManyToOne } from 'typeorm';
+import Flow from './Flow';
 
 @Entity('transactions')
 class Transaction extends BaseEntity implements TransactionBody {
@@ -66,6 +67,9 @@ class Transaction extends BaseEntity implements TransactionBody {
 
   @Column({ type: 'real' })
   value: number;
+
+  @ManyToOne(() => Flow, (flow) => flow.transactions)
+  flow: Flow;
 }
 
 export default Transaction;

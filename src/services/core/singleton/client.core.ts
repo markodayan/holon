@@ -32,12 +32,6 @@ class CoreClient {
     this.ws.on('message', async (res: string) => {
       const message = JSON.parse(res);
 
-      console.log(message);
-
-      // if (Array.isArray(message)) {
-      //   console.log('[core] message received from scraper at ', new Date());
-      // }
-
       if (message?.type === 'transactions') {
         console.log(`[core] transaction message received`);
         await Promise.all(message.data.map((tx: TransactionBody) => transaction.create(tx)));

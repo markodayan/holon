@@ -2,9 +2,14 @@ import WebSocket from 'ws';
 import { Provider, utils, RLP as rlp } from 'noob-ethereum';
 import { WSS } from '@scraper/singleton/server.scraper';
 import { fetchJSONRPCDetails, parseBlockTransactions } from '@scraper/utils';
-import Flow from '@db/entities/Flow';
+import { Flow, Transaction } from '@db/entities/index.entities';
 import { Cache } from '@cache/index.cache';
 import { RedisClientType } from '@redis/client';
+
+interface FilteredTxMap {
+  id: string;
+  hash: string;
+}
 
 /**
  * JSON-RPC WS client listening to the Ethereum full node for new header events
@@ -74,7 +79,12 @@ class NodeClient {
           if (ws.readyState === WebSocket.OPEN) {
             console.log('[scraper] message received from Ethereum at ', new Date());
             let filtered = this.searchTransactions(transactions);
-            console.log('filtered:', filtered);
+            console.log(
+              'filtered:',
+              filtered.reduce((acc: any[], v: any) => {
+                return [...acc, { hash: v.hash, flow: v.flow.id }];
+              }, [])
+            );
             let payload = JSON.stringify({ data: filtered, type: 'transactions' });
             ws.send(payload);
           }
@@ -95,6 +105,7 @@ class NodeClient {
   private searchTransactions(transactions: TransactionBody[]): TransactionBody[] {
     let result: any = [];
 
+    // Flow rows are cached and hence able to be appended to transaction bodies for writing to db
     this.flows.forEach((flow) => {
       let id = flow.id;
       let src_addr = JSON.parse(flow.from).address;
@@ -111,7 +122,12 @@ class NodeClient {
       // ];
       result = [
         ...result,
-        ...transactions.filter((tx: TransactionBody) => tx.from === src_addr && tx.to === dest_addr),
+        ...transactions
+          .filter((tx: TransactionBody) => tx.from === src_addr && tx.to === dest_addr)
+          .map((t: TransactionBody) => ({
+            ...t,
+            flow,
+          })),
       ];
     });
 
