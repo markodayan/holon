@@ -2,9 +2,11 @@ import { DataSource } from 'typeorm';
 import { check } from 'tcp-port-used';
 
 import * as entities from '@db/entities/index.entities';
-import { Cache } from '@core/singleton/cache';
+import { Cache } from '@cache/index.cache';
 
 const initDataStores = async () => {
+  const service = process.env.SERVICE_NAME || 'UNDEFINED';
+
   try {
     const connection = new DataSource({
       type: 'postgres',
@@ -12,7 +14,8 @@ const initDataStores = async () => {
       username: process.env.PG_USER,
       password: process.env.PG_PASSWORD,
       database: process.env.PG_DB,
-      entities: [...Object.values(entities)],
+      // entities: [...Object.values(entities)],
+      entities: [entities.Transaction, entities.Account, entities.Flow, entities.Rollup],
       synchronize: true,
     });
 
@@ -20,20 +23,12 @@ const initDataStores = async () => {
     await waitForService(6379); // Redis server
 
     await connection.initialize();
-    console.log('[core] Connected to Postgres');
+    console.log(`[${service}] Connected to Postgres`);
 
     const cache = Cache.getInstance();
-
-    await new Promise((resolve) => {
-      while (!cache.isOpen) {
-        console.log('[core] Redis connection not open yet');
-      }
-
-      resolve(cache);
-    });
   } catch (err) {
     console.error(err);
-    throw new Error('[core] Unable to connect to db');
+    throw new Error(`[${service}] Unable to connect to db`);
   }
 };
 

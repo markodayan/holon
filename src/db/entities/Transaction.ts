@@ -1,8 +1,7 @@
-import { Entity, BaseEntity, Column, PrimaryColumn, OneToOne, JoinColumn } from 'typeorm';
-import Receipt from './Receipt';
+import { Entity, BaseEntity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity('transactions')
-export class Transaction extends BaseEntity {
+class Transaction extends BaseEntity implements TransactionBody {
   @PrimaryColumn({
     unique: true,
     length: 66, // 66 chars = 64 chars (32 byte hash) + 2 chars ('0x')
@@ -11,7 +10,7 @@ export class Transaction extends BaseEntity {
 
   // For 2930 and 1559 TXs only
   @Column('simple-array', { nullable: true })
-  access_list: string[];
+  accessList: string[];
 
   @Column()
   blockHash: string;
@@ -19,7 +18,7 @@ export class Transaction extends BaseEntity {
   @Column({
     unique: true,
   })
-  blockNumber: string;
+  blockNumber: number;
 
   @Column()
   chainId: number;
@@ -27,25 +26,25 @@ export class Transaction extends BaseEntity {
   @Column()
   from: string;
 
-  @Column()
+  @Column({ type: 'real' })
   gas: number;
 
-  @Column()
+  @Column({ type: 'real' })
   gasPrice: number;
 
   @Column()
   input: string;
 
   // For 1559 TXs only
-  @Column({ nullable: true })
-  max_fee_per_gas: number;
+  @Column({ nullable: true, type: 'real' })
+  maxFeePerGas: number;
 
   // For 1559 TXs only
-  @Column({ nullable: true })
-  max_priority_fee_per_gas: number;
+  @Column({ nullable: true, type: 'real' })
+  maxPriorityFeePerGas: number;
 
   @Column()
-  nonce: string;
+  nonce: number;
 
   @Column()
   r: string;
@@ -65,7 +64,7 @@ export class Transaction extends BaseEntity {
   @Column()
   v: string;
 
-  @Column()
+  @Column({ type: 'real' })
   value: number;
 }
 

@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { CoreClient } from '@core/singleton/client';
+import { CoreClient } from '@core/singleton/client.core';
 import { fetchHostIP } from '@core/utils';
 import * as optimism from '@db/seeders/optimism.seeder';
 import { initDataStores, waitForService } from '@db/index';
@@ -23,15 +23,6 @@ async function run() {
   await waitForService(5000);
 
   CoreClient.init(`ws://${host}:5000/eth`);
-
-  try {
-    await optimism.seed(EOA_MAP, CONTRACT_MAP, RELATIONSHIPS);
-  } catch (err) {
-    console.log('Already seeded');
-  }
-
-  const ctc = await account.getByLabel('CanonicalTransactionChain');
-  await flow.createDivergent(ctc as Account);
 }
 
-run();
+run().then();

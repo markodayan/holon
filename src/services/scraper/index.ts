@@ -8,16 +8,30 @@ dotenv.config();
 import { initDataStores } from '@db/index';
 
 /* Singletons */
-import { NodeClient } from '@scraper/singleton/ws-client';
-import { WSS } from '@scraper/singleton/ws-server';
+import { NodeClient } from '@scraper/singleton/client.scraper';
+import { WSS } from '@scraper/singleton/server.scraper';
 
 import { app } from '@scraper/app';
 import { fetchJSONRPCDetails } from '@scraper/utils';
 
-const { http_url, ws_url } = fetchJSONRPCDetails();
+/* Optimism seeding */
+import { EOA_MAP, CONTRACT_MAP, RELATIONSHIPS } from 'src/seeder/optimism';
+import * as optimism from '@db/seeders/optimism.seeder';
 
-/* Initialisations */
-initDataStores().then(() => {
+async function run() {
+  await initDataStores();
+  const { http_url, ws_url } = fetchJSONRPCDetails();
+
+  try {
+    await optimism.seed(EOA_MAP, CONTRACT_MAP, RELATIONSHIPS);
+  } catch (err) {
+    console.log('Already seeded');
+  }
+
+  // const ctc = await account.getByLabel('CanonicalTransactionChain');
+  // await flow.createDivergent(ctc as Account);
+
+  /* Initialisations */
   const node = NodeClient.init(http_url as string, ws_url as string);
   const wss = WSS.init();
 
@@ -58,4 +72,6 @@ initDataStores().then(() => {
       process.exit(err ? 1 : 0);
     });
   });
-});
+}
+
+run().then();

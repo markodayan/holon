@@ -26,11 +26,11 @@ class Cache {
     this.client.connect();
 
     this.client.on('connect', () => {
-      console.log(`[scraper] Redis connected to ${this.host}:${this.port}`);
+      console.log(`[${process.env.SERVICE_NAME}] Redis connected to ${this.host}:${this.port}`);
     });
 
     this.client.on('error', (err) => {
-      console.error(`[scraper] Redis error: ${err}`);
+      console.error(`[${process.env.SERVICE_NAME}] Redis error: ${err}`);
     });
   }
 }

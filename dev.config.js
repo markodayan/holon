@@ -13,6 +13,7 @@ module.exports = {
       interpreter: './node_modules/.bin/ts-node',
       node_args: '-r tsconfig-paths/register ./src/services/scraper/index.ts',
       env: {
+        SERVICE_NAME: 'scraper',
         PORT: '5000',
         NODE_ENV: 'development',
         JSON_RPC_HTTP: process.env.JSON_RPC_HTTP,
@@ -30,6 +31,7 @@ module.exports = {
       interpreter: './node_modules/.bin/ts-node',
       node_args: '-r tsconfig-paths/register ./src/services/core/index.ts',
       env: {
+        SERVICE_NAME: 'core',
         PORT: '5001',
         NODE_ENV: 'development',
         JSON_RPC_HTTP: process.env.JSON_RPC_HTTP,

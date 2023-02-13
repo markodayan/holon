@@ -1,12 +1,12 @@
-declare interface TransactionReceipt {
+declare interface ReceiptBody {
   blockHash: string;
   blockNumber: number; // conversion
-  contractAddress: string | null;
+  contractAddress?: string;
   cumulativeGasUsed: number; // conversion
   effectiveGasPrice: number; // conversion
   from: string;
-  gas_used: number; // conversion
-  logs: TransactionLogItem[];
+  gasUsed: number; // conversion
+  logs?: string[];
   logsBloom: string;
   status: string;
   to: string;

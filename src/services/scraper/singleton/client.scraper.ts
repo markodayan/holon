@@ -1,9 +1,9 @@
 import WebSocket from 'ws';
 import { Provider, utils, RLP as rlp } from 'noob-ethereum';
-import { WSS } from '@scraper/singleton/ws-server';
+import { WSS } from '@scraper/singleton/server.scraper';
 import { fetchJSONRPCDetails, parseBlockTransactions } from '@scraper/utils';
 import Flow from '@db/entities/Flow';
-import { Cache } from '@scraper/singleton/cache';
+import { Cache } from '@cache/index.cache';
 import { RedisClientType } from '@redis/client';
 
 /**
@@ -72,11 +72,11 @@ class NodeClient {
 
         this.wss.clients.forEach((ws: WebSocket) => {
           if (ws.readyState === WebSocket.OPEN) {
-            /* TODO: At this point we will fire off the message handler to prepare whatever data we are about to broadcast to clients */
-
             console.log('[scraper] message received from Ethereum at ', new Date());
             let filtered = this.searchTransactions(transactions);
-            ws.send(JSON.stringify(filtered));
+            console.log('filtered:', filtered);
+            let payload = JSON.stringify({ data: filtered, type: 'transactions' });
+            ws.send(payload);
           }
 
           // @ts-ignore // ws types error
@@ -92,7 +92,7 @@ class NodeClient {
   }
 
   /* Over a block of transactions, check for each flow */
-  private async searchTransactions(transactions: TransactionBody[]) {
+  private searchTransactions(transactions: TransactionBody[]): TransactionBody[] {
     let result: any = [];
 
     this.flows.forEach((flow) => {
@@ -100,18 +100,21 @@ class NodeClient {
       let src_addr = JSON.parse(flow.from).address;
       let dest_addr = JSON.parse(flow.to).address;
 
+      // result = [
+      //   ...result,
+      //   ...transactions
+      //     .filter((tx: TransactionBody) => tx.from === src_addr && tx.to === dest_addr)
+      //     .map((t: TransactionBody) => ({
+      //       id,
+      //       hash: t.hash,
+      //     })),
+      // ];
       result = [
         ...result,
-        ...transactions
-          .filter((tx: TransactionBody) => tx.from === src_addr && tx.to === dest_addr)
-          .map((t: TransactionBody) => ({
-            id,
-            hash: t.hash,
-          })),
+        ...transactions.filter((tx: TransactionBody) => tx.from === src_addr && tx.to === dest_addr),
       ];
     });
 
-    console.log('matched transactions:', result);
     return result;
   }
 
@@ -159,8 +162,8 @@ class NodeClient {
         ];
       }
 
-      // let keys = await this.cache.keys('*');
-      // console.log('keys', keys);
+      let keys = await this.cache.keys('*');
+      console.log('keys', keys);
     } catch (err) {
       console.error(err);
       throw new Error('[scraper] cacheFlows() error');
