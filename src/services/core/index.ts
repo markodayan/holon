@@ -4,17 +4,24 @@ dotenv.config();
 import { CoreClient } from '@core/singleton/client';
 import { fetchHostIP } from '@core/utils';
 import * as optimism from '@db/seeders/optimism.seeder';
-import { initDataStores } from '@db/index';
+import { initDataStores, waitForService } from '@db/index';
 import { EOA_MAP, CONTRACT_MAP, RELATIONSHIPS } from 'src/seeder/optimism';
+import { Account } from '@db/entities/index.entities';
+
+import * as account from '@db/controllers/account.controller';
+import * as flow from '@db/controllers/flow.controller';
 
 const host = fetchHostIP();
 
 // keeps the service alive
 setInterval(() => {}, 1 << 30);
 
-/* Give the scraper websocket server time to initialise */
-setTimeout(async () => {
+async function run() {
+  /* Wait for database and cache servers to start up */
   await initDataStores();
+  /* Give the scraper websocket server time to initialise */
+  await waitForService(5000);
+
   CoreClient.init(`ws://${host}:5000/eth`);
 
   try {
@@ -22,4 +29,9 @@ setTimeout(async () => {
   } catch (err) {
     console.log('Already seeded');
   }
-}, 5000);
+
+  const ctc = await account.getByLabel('CanonicalTransactionChain');
+  await flow.createDivergent(ctc as Account);
+}
+
+run();

@@ -26,7 +26,7 @@ async function create(
   }
 }
 
-async function getByAddress(address: string) {
+async function getByAddress(address: string): Promise<Account | null> {
   try {
     return await Account.findOneBy({
       address,
@@ -37,4 +37,15 @@ async function getByAddress(address: string) {
   }
 }
 
-export { create, getByAddress };
+async function getByLabel(label: string): Promise<Account | null> {
+  try {
+    return await Account.findOneBy({
+      label,
+    });
+  } catch (err) {
+    console.error(err);
+    throw new Error('Get account by label failure');
+  }
+}
+
+export { create, getByAddress, getByLabel };

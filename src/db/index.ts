@@ -41,6 +41,7 @@ async function waitForService(port_num: number) {
   const PORT_LABEL_MAP: IPortMap = {
     5432: 'Postgres',
     6379: 'redis-server',
+    5000: 'scraper',
   };
 
   while (!(await isReady(port_num))) {
@@ -67,4 +68,4 @@ async function isReady(port_num: number) {
   }
 }
 
-export { initDataStores };
+export { initDataStores, waitForService };
