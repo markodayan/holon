@@ -3,11 +3,6 @@ const EOA_MAP = {
   Sequencer: '0x6887246668a3b87f54deb3b94ba47a6f63f32985',
 };
 
-// const EOA_MAP = new Map([
-//   ['StateRootProposer', '0xbe5dab4a2e9cd0f27300db4ab94bee3a233aeb19'],
-//   ['Sequencer', '0x6887246668a3b87f54deb3b94ba47a6f63f32985'],
-// ]);
-
 const CONTRACT_MAP = {
   CanonicalTransactionChain: '0x5e4e65926ba27467555eb562121fac00d24e9dd2',
   StateCommitmentChain: '0xbe5dab4a2e9cd0f27300db4ab94bee3a233aeb19',
@@ -15,10 +10,6 @@ const CONTRACT_MAP = {
   L1CrossDomainMessenger: '0x25ace71c97b33cc4729cf772ae268934f7ab5fa1',
   TeleportrDeposit: '0x52ec2f3d7c5977a8e558c8d9c6000b615098e8fc',
 };
-
-// const x = new Map([
-
-// ])
 
 const RELATIONSHIPS = [
   {

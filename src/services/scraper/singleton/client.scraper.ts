@@ -1,14 +1,21 @@
 import WebSocket from 'ws';
-import { Provider, utils, RLP as rlp } from 'noob-ethereum';
+import { Provider, utils } from 'noob-ethereum';
 import { WSS } from '@scraper/singleton/server.scraper';
 import { fetchJSONRPCDetails, parseBlockTransactions } from '@scraper/utils';
-import { Flow, Transaction } from '@db/entities/index.entities';
+import { Flow } from '@db/entities/index.entities';
 import { Cache } from '@cache/index.cache';
 import { RedisClientType } from '@redis/client';
 
 interface FilteredTxMap {
   id: string;
   hash: string;
+}
+
+interface SerialisedFlow {
+  from: string; // serialised Account
+  to: string; // serialised Account
+  id: number;
+  abi?: any;
 }
 
 /**
@@ -20,8 +27,7 @@ class NodeClient {
   private cache: RedisClientType; // Redis client instance
   public provider: Provider; // JSON-RPC HTTP provider link to full node
   public wss: WebSocket.Server; // Custom WebSockets server to deliver messages to other microservices
-  // public flows: Flow[]; // the interactions that will be scanned for
-  public flows: any[] = [];
+  public flows: SerialisedFlow[] = [];
 
   public prev: number;
   public latest: number;
@@ -107,19 +113,9 @@ class NodeClient {
 
     // Flow rows are cached and hence able to be appended to transaction bodies for writing to db
     this.flows.forEach((flow) => {
-      let id = flow.id;
       let src_addr = JSON.parse(flow.from).address;
       let dest_addr = JSON.parse(flow.to).address;
 
-      // result = [
-      //   ...result,
-      //   ...transactions
-      //     .filter((tx: TransactionBody) => tx.from === src_addr && tx.to === dest_addr)
-      //     .map((t: TransactionBody) => ({
-      //       id,
-      //       hash: t.hash,
-      //     })),
-      // ];
       result = [
         ...result,
         ...transactions

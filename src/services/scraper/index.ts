@@ -28,9 +28,6 @@ async function run() {
     console.log('Already seeded');
   }
 
-  // const ctc = await account.getByLabel('CanonicalTransactionChain');
-  // await flow.createDivergent(ctc as Account);
-
   /* Initialisations */
   const node = NodeClient.init(http_url as string, ws_url as string);
   const wss = WSS.init();
