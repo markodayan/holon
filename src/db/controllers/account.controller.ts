@@ -22,7 +22,7 @@ async function create(
     return await account.save();
   } catch (err) {
     console.error(err);
-    throw new Error('Create account failure');
+    throw new Error('[db controller] Create account failure');
   }
 }
 
@@ -33,7 +33,7 @@ async function getByAddress(address: string): Promise<Account | null> {
     });
   } catch (err) {
     console.error(err);
-    throw new Error('Get account by address failure');
+    throw new Error('[db controller] Get account by address failure');
   }
 }
 
@@ -44,7 +44,7 @@ async function getByLabel(label: string): Promise<Account | null> {
     });
   } catch (err) {
     console.error(err);
-    throw new Error('Get account by label failure');
+    throw new Error('[db controller] Get account by label failure');
   }
 }
 

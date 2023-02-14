@@ -10,7 +10,7 @@ async function create(label: string, description: string): Promise<Rollup> {
     return await rollup.save();
   } catch (err) {
     console.error(err);
-    throw new Error('Create rollup failure');
+    throw new Error('[db controller] Create rollup failure');
   }
 }
 
@@ -21,7 +21,7 @@ async function getById(id: number) {
     });
   } catch (err) {
     console.error(err);
-    throw new Error('Get rollup by id failure');
+    throw new Error('[db controller] Get rollup by id failure');
   }
 }
 
@@ -32,7 +32,7 @@ async function getByLabel(label: string) {
     });
   } catch (err) {
     console.error(err);
-    throw new Error('Get rollup by label failure');
+    throw new Error('[db controller] Get rollup by label failure');
   }
 }
 

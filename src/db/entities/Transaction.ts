@@ -66,6 +66,7 @@ class Transaction extends BaseEntity implements TransactionBody {
   @Column({ type: 'real' })
   value: number;
 
+  // FK = flowId
   @ManyToOne(() => Flow, (flow) => flow.transactions)
   flow: Flow;
 }

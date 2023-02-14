@@ -12,8 +12,8 @@ RUN pm2 set pm2-logrotate:compress true
 
 RUN npm install
 
-RUN apk --no-cache add curl
-RUN apk add busybox-extras
+# RUN apk --no-cache add curl
+# RUN apk add busybox-extras
 
 # Bundle app source
 COPY . .

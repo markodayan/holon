@@ -11,8 +11,29 @@ async function create(tx: TransactionBody) {
     return await transaction.save();
   } catch (err) {
     console.error(err);
-    throw new Error('Create transaction failure');
+    throw new Error('[db controller] Create transaction failure');
   }
 }
 
-export { create };
+type TransactionsParams = 'flow';
+
+async function getByParams(param: TransactionsParams, value: number): Promise<Transaction[]> {
+  const queryBuilder = Transaction.createQueryBuilder('transaction');
+
+  switch (param) {
+    case 'flow':
+      queryBuilder.where('transaction.flowId = :value', { value });
+      break;
+    default:
+      throw new Error(`[db controller] Invalid transaction param: ${param}`);
+  }
+
+  try {
+    return await queryBuilder.getMany();
+  } catch (err) {
+    console.error(err);
+    throw new Error('[db controller] get transaction by flow query failure');
+  }
+}
+
+export { create, getByParams };

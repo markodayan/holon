@@ -6,7 +6,7 @@ async function create(r: ReceiptBody) {
     return await receipt.save();
   } catch (err) {
     console.error(err);
-    throw new Error('Create receipt failure');
+    throw new Error('[db controller] Create receipt failure');
   }
 }
 
