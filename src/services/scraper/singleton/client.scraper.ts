@@ -73,36 +73,47 @@ class NodeClient {
       this.latest = Date.now();
 
       const data = JSON.parse(res);
+
       const diff = this.latest - this.prev;
       this.prev = this.latest;
 
-      // New block head update detected
-      if (data?.method) {
-        // Fetch latest block body corresponding to block header received from full node ws connection
-        const raw = await this.provider.getLatestBlock(true);
-        const transactions = await parseBlockTransactions(raw.transactions as RawTransactionBody[]);
+      if (data?.id) {
+        return;
+      }
 
-        this.wss.clients.forEach((ws: WebSocket) => {
-          if (ws.readyState === WebSocket.OPEN) {
-            console.log('[scraper] message received from Ethereum at ', new Date());
-            let filtered = this.searchTransactions(transactions);
-            console.log(
-              'filtered:',
-              filtered.reduce((acc: any[], v: any) => {
-                return [...acc, { hash: v.hash, flow: v.flow.id }];
-              }, [])
-            );
-            let payload = JSON.stringify({ data: filtered, type: 'transactions' });
-            ws.send(payload);
+      // Fetch latest block body corresponding to block header received from full node ws connection
+      // const raw = await this.provider.getLatestBlock(true);
+      const raw = await this.provider.getBlockByNumber(utils.decimal(data.params.result.number), true);
+
+      const transactions = await parseBlockTransactions(raw.transactions as RawTransactionBody[]);
+
+      this.wss.clients.forEach((ws: WebSocket) => {
+        if (ws.readyState === WebSocket.OPEN) {
+          console.log('[scraper] message received from Ethereum at ', new Date());
+          const filtered = this.searchTransactions(transactions);
+
+          if (filtered.length === 0) {
+            console.log('no matched transactions for this block');
+            return;
           }
 
-          // @ts-ignore // ws types error
-          ws.isAlive = false;
-          ws.ping(() => {
-            this.ping(ws);
-          });
+          console.log(
+            'filtered:',
+            filtered.reduce((acc: any[], v: any) => {
+              return [...acc, { hash: v.hash, flow: v.flow.id }];
+            }, [])
+          );
+
+          const payload = JSON.stringify({ data: filtered, type: 'transactions' });
+          ws.send(payload);
+        }
+
+        // @ts-ignore // ws types error
+        ws.isAlive = false;
+        ws.ping(() => {
+          this.ping(ws);
         });
-      }
+      });
     });
 
     console.log(`[scraper] Scraper client WS connection initialised...`);
