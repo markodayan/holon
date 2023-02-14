@@ -2,10 +2,11 @@
 
 > Untitled Rollup Service (URS) is a software service that runs on a host machine alongside an Ethereum full node - [See here for more details](https://hackmd.io/O93wObfUS0af7nhLv0EW5A).
 
-The URS architecture consists of 2 sub-systems namely:
+Below you can see a system diagram of URS and how it functions on a computer hosting an Ethereum full node (specifically interfacing with an execution client like Geth):
 
-- `engine` subsystem (comprising of `scraper` and `core` PM2 services as well as a `db` and `cache` container for data store servers)
-- `app` subsystem (comprising of the `api` and `client` services)
+<div style='display: flex; justify-content: center;'>
+<image src='https://storage.googleapis.com/rollup-research/URS%20system%20diagram.png'>
+</div>
 
 ## Pre-requisites
 

@@ -7,7 +7,7 @@ async function getFlowsByAddress(req: Request<{}, {}, {}, { address: string }>, 
   console.log('address:', address);
 
   try {
-    let flows = await flow.getFlowsByAddress(address);
+    let flows = await flow.getByAddress(address);
 
     res.status(200).json(flows);
   } catch (err) {

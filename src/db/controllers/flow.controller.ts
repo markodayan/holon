@@ -39,7 +39,7 @@ async function createDivergent(from: Account): Promise<Flow> {
   }
 }
 
-async function getAccountFlows(acc: Account): Promise<Flow[]> {
+async function getByAccount(acc: Account): Promise<Flow[]> {
   try {
     return await Flow.createQueryBuilder('flow')
       .leftJoinAndSelect('flow.from', 'from')
@@ -52,7 +52,7 @@ async function getAccountFlows(acc: Account): Promise<Flow[]> {
   }
 }
 
-async function getFlowsByAddress(address: string): Promise<Flow[]> {
+async function getByAddress(address: string): Promise<Flow[]> {
   try {
     return await Flow.createQueryBuilder('flow')
       .leftJoinAndSelect('flow.from', 'from')
@@ -77,4 +77,4 @@ async function getAll(): Promise<Flow[]> {
   }
 }
 
-export { create, createConvergent, createDivergent, getAll, getAccountFlows, getFlowsByAddress };
+export { create, createConvergent, createDivergent, getAll, getByAccount, getByAddress };
