@@ -5,8 +5,10 @@
 Below you can see a system diagram of URS and how it functions on a computer hosting an Ethereum full node (specifically interfacing with an execution client like Geth):
 
 <div style='display: flex; justify-content: center;'>
-<image src='https://storage.googleapis.com/rollup-research/URS%20system%20diagram.png'>
+<image src='https://storage.googleapis.com/rollup-research/System%20diagram%20background%20white.png'>
 </div>
+
+<br>
 
 ## Pre-requisites
 
