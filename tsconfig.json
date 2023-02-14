@@ -25,6 +25,7 @@
     "paths": {
       "@scraper/*": ["src/services/scraper/*"],
       "@core/*": ["src/services/core/*"],
+      "@api/*": ["src/services/api/*"],
       "@db/*": ["src/db/*"],
       "@cache/*": ["src/cache/*"]
     }

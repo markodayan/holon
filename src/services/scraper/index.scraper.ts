@@ -11,7 +11,7 @@ import { initDataStores } from '@db/index';
 import { NodeClient } from '@scraper/singleton/client.scraper';
 import { WSS } from '@scraper/singleton/server.scraper';
 
-import { app } from '@scraper/app';
+import { app } from '@scraper/app.scraper';
 import { fetchJSONRPCDetails } from '@scraper/utils';
 
 /* Optimism seeding */
@@ -61,7 +61,7 @@ async function run() {
   }, 60000); // testing 60 seconds
 
   server.listen(PORT, () => {
-    console.log(`[scraper] Server running in ${process.env.NODE_ENV} mode on port ${PORT}!`);
+    console.log(`[${process.env.SERVICE_NAME}] running in ${process.env.NODE_ENV} mode on port ${PORT}!`);
   });
 
   process.on('SIGINT', function () {

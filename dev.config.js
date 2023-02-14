@@ -8,10 +8,10 @@ module.exports = {
   apps: [
     {
       name: 'scraper',
-      script: './src/services/scraper/index.ts',
+      script: './src/services/scraper/index.scraper.ts',
       watch: false,
       interpreter: './node_modules/.bin/ts-node',
-      node_args: '-r tsconfig-paths/register ./src/services/scraper/index.ts',
+      node_args: '-r tsconfig-paths/register ./src/services/scraper/index.scraper.ts',
       env: {
         SERVICE_NAME: 'scraper',
         PORT: '5000',
@@ -26,10 +26,10 @@ module.exports = {
     },
     {
       name: 'core',
-      script: './src/services/core/index.ts',
+      script: './src/services/core/index.core.ts',
       watch: false,
       interpreter: './node_modules/.bin/ts-node',
-      node_args: '-r tsconfig-paths/register ./src/services/core/index.ts',
+      node_args: '-r tsconfig-paths/register ./src/services/core/index.core.ts',
       env: {
         SERVICE_NAME: 'core',
         PORT: '5001',
@@ -38,6 +38,22 @@ module.exports = {
         JSON_RPC_WS: process.env.JSON_RPC_WS,
         USER_NAME: process.env.USER_NAME,
         DATABASE_NAME: process.env.DATABASE_NAME,
+        DB_HOST: process.env.DB_HOST || 'db',
+        CACHE_HOST: process.env.CACHE_HOST || 'cache',
+      },
+      max_restarts: 10,
+      restart_delay: 5000,
+    },
+    {
+      name: 'api',
+      script: './src/services/api/index.api.ts',
+      watch: false,
+      interpreter: './node_modules/.bin/ts-node',
+      node_args: '-r tsconfig-paths/register ./src/services/api/index.api.ts',
+      env: {
+        SERVICE_NAME: 'api',
+        PORT: '5001',
+        NODE_ENV: 'development',
         DB_HOST: process.env.DB_HOST || 'db',
         CACHE_HOST: process.env.CACHE_HOST || 'cache',
       },

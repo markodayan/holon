@@ -43,8 +43,8 @@ services:
     depends_on:
       - db_setup
     ports:
-      - '5000:8000'
-      - '5001:8001'
+      - '5000:8000' # scraper
+      - '5001:8001' # api
     command: /usr/src/app/scripts/wait_for_db.sh
 volumes:
   db:

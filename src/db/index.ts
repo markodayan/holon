@@ -26,6 +26,8 @@ const initDataStores = async () => {
     console.log(`[${service}] Connected to Postgres`);
 
     const cache = Cache.getInstance();
+
+    return connection;
   } catch (err) {
     console.error(err);
     throw new Error(`[${service}] Unable to connect to db`);
