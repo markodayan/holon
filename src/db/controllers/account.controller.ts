@@ -26,26 +26,17 @@ async function create(
   }
 }
 
-async function getByAddress(address: string): Promise<Account | null> {
+type AccountParams = 'address' | 'label';
+
+async function getBy(param: AccountParams, value: string): Promise<Account | null> {
   try {
     return await Account.findOneBy({
-      address,
+      [param]: value,
     });
   } catch (err) {
     console.error(err);
-    throw new Error('[db controller] Get account by address failure');
+    throw new Error(`[db controller] Get account by ${param} failure`);
   }
 }
 
-async function getByLabel(label: string): Promise<Account | null> {
-  try {
-    return await Account.findOneBy({
-      label,
-    });
-  } catch (err) {
-    console.error(err);
-    throw new Error('[db controller] Get account by label failure');
-  }
-}
-
-export { create, getByAddress, getByLabel };
+export { create, getBy };
