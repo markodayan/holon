@@ -4,10 +4,8 @@ import * as flow from '@db/controllers/flow.controller';
 async function getFlowsByAddress(req: Request<{}, {}, {}, { address: string }>, res: Response) {
   const { address } = req.query;
 
-  console.log('address:', address);
-
   try {
-    let flows = await flow.getByAddress(address);
+    const flows = await flow.getByAddress(address);
 
     res.status(200).json(flows);
   } catch (err) {

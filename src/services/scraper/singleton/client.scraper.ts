@@ -77,12 +77,12 @@ class NodeClient {
       const diff = this.latest - this.prev;
       this.prev = this.latest;
 
+      // If init subscription response (return from message handler)
       if (data?.id) {
         return;
       }
 
       // Fetch latest block body corresponding to block header received from full node ws connection
-      // const raw = await this.provider.getLatestBlock(true);
       const raw = await this.provider.getBlockByNumber(utils.decimal(data.params.result.number), true);
 
       const transactions = await parseBlockTransactions(raw.transactions as RawTransactionBody[]);
