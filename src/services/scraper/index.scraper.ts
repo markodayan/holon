@@ -22,10 +22,13 @@ async function run() {
   await initDataStores();
   const { http_url, ws_url } = fetchJSONRPCDetails();
 
-  try {
-    await optimism.seed(EOA_MAP, CONTRACT_MAP, RELATIONSHIPS);
-  } catch (err) {
-    console.log('Already seeded');
+  /* Seed data */
+  if (process.env.SEED === 'yes') {
+    try {
+      await optimism.seed(EOA_MAP, CONTRACT_MAP, RELATIONSHIPS);
+    } catch (err) {
+      console.log('Already seeded');
+    }
   }
 
   /* Initialisations */

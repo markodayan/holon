@@ -1,10 +1,13 @@
 import WebSocket from 'ws';
 
 import * as transaction from '@db/controllers/transaction.controller';
+import { Cache } from '@cache/index.cache';
+import { RedisClientType } from '@redis/client';
 
 class CoreClient {
   private static instance: CoreClient;
   private ws: WebSocket; // websocket client connection to scraper websockets server
+  private cache: RedisClientType;
 
   public static init(ws_url: string): CoreClient {
     if (!this.instance) {
@@ -16,6 +19,7 @@ class CoreClient {
 
   private constructor(ws_url: string) {
     this.initWS(ws_url);
+    this.cache = Cache.getInstance();
   }
 
   public initWS(url: string) {
@@ -23,6 +27,7 @@ class CoreClient {
 
     this.ws.on('open', () => {
       console.log(`[core] Core client WS connection opened`);
+      this.cache.publish('core-ready', 'Ready'); // publish core service is ready (API service depends on this for startup)
     });
 
     this.ws.on('close', () => {

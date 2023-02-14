@@ -2,7 +2,24 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import { Cache } from '@cache/index.cache';
+import { initDataStores } from '@db/index';
 import router from '@api/routes/routes.api';
+
+const cache = Cache.getInstance();
+
+async function startup() {
+  await initDataStores();
+
+  cache.subscribe('core-ready', handleMessage);
+}
+
+function handleMessage(message: string, channel: string) {
+  console.log(`[${process.env.SERVICE_NAME}] channel: ${channel} subscriber message: ${message}`);
+  if (message === 'Ready') {
+    run();
+  }
+}
 
 async function run() {
   const app = express();
@@ -19,4 +36,4 @@ async function run() {
   });
 }
 
-run().then();
+startup();

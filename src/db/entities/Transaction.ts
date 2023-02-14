@@ -16,9 +16,7 @@ class Transaction extends BaseEntity implements TransactionBody {
   @Column()
   blockHash: string;
 
-  @Column({
-    unique: true,
-  })
+  @Column()
   blockNumber: number;
 
   @Column()

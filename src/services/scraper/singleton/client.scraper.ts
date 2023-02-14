@@ -58,6 +58,7 @@ class NodeClient {
     this.ws.on('open', () => {
       console.log(`[scraper] Ethereum client WS connection established`);
       this.ws.send('{"jsonrpc":"2.0","method":"eth_subscribe","params":["newHeads"], "id":1}');
+      this.cache.publish('scraper-ready', 'Ready'); // publish scraper service is ready (core service depends on this for startup)
     });
 
     this.ws.on('close', () => {
