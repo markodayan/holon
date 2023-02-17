@@ -1,10 +1,14 @@
 version: '3.9'
 services:
+  # save 1 or more writes to disk every 20 seconds
   cache:
     container_name: cache
-    image: redis
+    image: redis:6.2-alpine
+    volumes:
+      - ${CACHE_HOST_PATH}:${CACHE_CONTAINER_PATH}
     ports:
       - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
   db:
     container_name: db
     image: postgres
