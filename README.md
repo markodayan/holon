@@ -73,3 +73,23 @@ All you need to do is run the following command once you have cloned the reposit
 ```bash
 npm run compose
 ```
+
+# User Features Available
+
+The following features are currently available to the user (accessible over an application API via HTTP routes):
+
+- Fetch an account (by address or designated label)
+- Fetch all flows associated with an account (query by account address)
+- Fetch all transactions corresponding to a flow (by flow id)
+
+## What is a flow?
+
+<b>A flow describes a transaction interaction involving an address</b>. It can describe conditions such as:
+
+- Address A sending transaction to Address B (A -> B)
+- Address B sending transaction to Address A (B -> A)
+- Address A and Address B bidirection transactions (both the above conditions) [A <-> B]
+- Address A sending a transaction to any address (A -> \*)
+- Any address sending a transaction to Address A (\* -> A)
+
+> Later changes will involve more nuanced flows such as a specific type of transaction interaction occuring such as a specific contract call made to a destination address or Ether transfer made to specific address (these events will leverage contract ABIs and log events produced and available from transaction receipts)
