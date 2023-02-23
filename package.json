@@ -1,7 +1,7 @@
 {
-  "name": "untitled-rollup-servicce",
+  "name": "holon",
   "version": "1.0.0",
-  "description": "Untitled Rollup Service (URS) to run on a host machine alongside an Ethereum full node.",
+  "description": "Holon is a service that measures rollup-related messages published to Ethereum and produces metrics that yield economic insights",
   "main": "main.js",
   "scripts": {
     "compose": "HOST_IP_ADDR=$(node scripts/ip.js) docker compose up -d --build",
@@ -11,7 +11,7 @@
     "backend:dev:create-container": "docker run -d -p 5000:8000 --name backend dev/backend",
     "scraper:dev:build-image": "docker build -t dev/scraper -f Dockerfile.dev .",
     "scraper:dev:create-container": "docker run -d -p 5000:8000 --name scraper dev/scraper",
-    "postgres:dev:create-container": "docker run -d -p 5433:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=urs-test-1 -v pgdata:/Users/markodayan/docker-postgres --name postgresql postgres"
+    "postgres:dev:create-container": "docker run -d -p 5433:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=holon_test -v pgdata:/Users/markodayan/docker-postgres --name postgresql postgres"
   },
   "keywords": [],
   "author": "",

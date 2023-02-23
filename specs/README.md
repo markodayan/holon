@@ -1,4 +1,4 @@
-# Untitled Rollup Service (Run alongside L1 full node)
+# Holon (Run alongside L1 full node)
 
 A configurable service dedicated towards collecting, recording and processing rollup-related data posted by rollup systems leveraging Ethereum for data availability.
 

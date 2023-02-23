@@ -11,7 +11,7 @@ services:
     command: redis-server --save 20 1 --loglevel warning
   db:
     container_name: db
-    image: postgres
+    image: postgres:15.2-alpine
     environment:
       POSTGRES_PASSWORD: ${PG_PASSWORD}
       POSTGRES_USER: ${PG_USER}
@@ -23,7 +23,7 @@ services:
       - '5432:5432'
   db_setup:
     container_name: db_setup
-    image: postgres
+    image: postgres:15.2-alpine
     volumes:
       - ./scripts/init_db.sh:/usr/src/init_db.sh
     environment:
@@ -41,7 +41,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     environment:
-      HOST_IP_ADDR: ${HOST_IP_ADDR}
+      HOST_IP_ADDR: ${HOST_IP_ADDR} # You have to pass this or we have no host IP context!
     extra_hosts:
       - ${HOST_LABEL}:${HOST_IP_ADDR}
     depends_on:
