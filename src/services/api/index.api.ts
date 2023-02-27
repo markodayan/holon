@@ -2,26 +2,14 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { Cache } from '@cache/index.cache';
 import { initDataStores } from '@db/index';
 import router from '@api/routes/routes.api';
-
-const cache = Cache.getInstance();
-
-async function startup() {
-  await initDataStores();
-
-  cache.subscribe('core-ready', handleMessage);
-}
-
-function handleMessage(message: string, channel: string) {
-  console.log(`[${process.env.SERVICE_NAME}] channel: ${channel} subscriber message: ${message}`);
-  if (message === 'Ready') {
-    run();
-  }
-}
+import Broker from '@rabbitmq/broker';
+import { Cache } from '@cache/index.cache';
+import { waitForPort } from 'src/utils/ports.utils';
 
 async function run() {
+  const service_name = process.env.SERVICE_NAME;
   const app = express();
 
   app.use(express.json());
@@ -29,11 +17,36 @@ async function run() {
 
   app.use('/', router);
 
-  const PORT = 8001; // mapped to 5001
+  Cache.getInstance();
 
-  app.listen(PORT, () => {
-    console.log(`[${process.env.SERVICE_NAME}] running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-  });
+  const PORT = process.env.SERVICE_PORT;
+
+  const rabbit_wrapper = new Broker();
+  await waitForPort(5672);
+  await initDataStores();
+
+  try {
+    await rabbit_wrapper.init();
+    const { broker } = rabbit_wrapper;
+    const subscription = await broker.subscribe('core_ready');
+
+    subscription.on('message', async (message, content, ackOrNack) => {
+      console.log(`[${service_name}] received ${content}`);
+
+      app.listen(PORT, async () => {
+        /* When app is ready, publish ready message */
+        await broker.publish(`${service_name}_ready`, service_name, { routingKey: service_name });
+      });
+
+      process.on('exit', (code) => {
+        console.log(`[${service_name}] About to exit with code: ${code}`);
+      });
+
+      ackOrNack();
+    });
+  } catch (err: any) {
+    console.log(`[${service_name}] top-level error (broker-related likely)`);
+  }
 }
 
-startup();
+run().then();

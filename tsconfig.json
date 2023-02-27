@@ -27,7 +27,9 @@
       "@core/*": ["src/services/core/*"],
       "@api/*": ["src/services/api/*"],
       "@db/*": ["src/db/*"],
-      "@cache/*": ["src/cache/*"]
+      "@cache/*": ["src/cache/*"],
+      "@rabbitmq/*": ["src/rabbitmq/*"],
+      "@error/*": ["src/error/*"]
     }
   },
   "exclude": ["junk"]

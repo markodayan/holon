@@ -47,9 +47,22 @@ services:
     depends_on:
       - db_setup
     ports:
-      - '5000:8000' # scraper
-      - '5001:8001' # api
+      - '5000:5000' # scraper
+      - '5001:5001' # core
+      - '5002:5002' # api
     command: /usr/src/app/scripts/wait_for_db.sh
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.8-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    ports:
+      # AMQP protocol port
+      - '5672:5672'
+      # Management UI
+      - '15672:15672'
+
 volumes:
   db:
     external: true

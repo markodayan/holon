@@ -14,7 +14,7 @@ module.exports = {
       node_args: '-r tsconfig-paths/register ./src/services/scraper/index.scraper.ts',
       env: {
         SERVICE_NAME: 'scraper',
-        PORT: '5000',
+        SERVICE_PORT: '5000',
         NODE_ENV: 'development',
         JSON_RPC_HTTP: process.env.JSON_RPC_HTTP,
         JSON_RPC_WS: process.env.JSON_RPC_WS,
@@ -32,7 +32,7 @@ module.exports = {
       node_args: '-r tsconfig-paths/register ./src/services/core/index.core.ts',
       env: {
         SERVICE_NAME: 'core',
-        PORT: '5001',
+        SERVICE_PORT: '5001',
         NODE_ENV: 'development',
         JSON_RPC_HTTP: process.env.JSON_RPC_HTTP,
         JSON_RPC_WS: process.env.JSON_RPC_WS,
@@ -52,7 +52,7 @@ module.exports = {
       node_args: '-r tsconfig-paths/register ./src/services/api/index.api.ts',
       env: {
         SERVICE_NAME: 'api',
-        PORT: '5001',
+        SERVICE_PORT: '5002',
         NODE_ENV: 'development',
         DB_HOST: process.env.DB_HOST || 'db',
         CACHE_HOST: process.env.CACHE_HOST || 'cache',
