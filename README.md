@@ -5,7 +5,7 @@
 Below you can see a system diagram of Holon and how it functions on a computer hosting an Ethereum full node (specifically interfacing with an execution client like Geth):
 
 <div style='display: flex; justify-content: center;'>
-<image src='https://storage.googleapis.com/rollup-research/holon-arch.png'>
+<image src='https://storage.googleapis.com/rollup-research/holon-arch-2.png'>
 </div>
 
 <br>
