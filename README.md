@@ -4,7 +4,7 @@
 
 ## Links
 
-- [HackMD Notes (as part of Ethereum Protocol Fellowship final update)](https://hackmd.io/mDOVIKk2Sfeb2kbXORs_kQ?both)
+- [HackMD Notes (as part of Ethereum Protocol Fellowship final update)](https://hackmd.io/@_JhGo4WfSr-xV5GeC0ItGQ/B15lBjjAs)
 - [Holon presentation (16 Min)](https://www.youtube.com/watch?v=m94kB8SxO4U)
 
 Below you can see a system diagram of Holon and how it functions on a computer hosting an Ethereum full node (specifically interfacing with an execution client like Geth):
