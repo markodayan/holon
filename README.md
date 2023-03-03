@@ -1,6 +1,11 @@
 # Holon
 
-> Holon (previously Untitled Rollup Service) is a software service that runs on a host machine alongside an Ethereum full node - [See here for more details](https://hackmd.io/O93wObfUS0af7nhLv0EW5A).
+> Holon is a software service geared towards collecting and processing L1 block to data to produce insights about rollup activity on Ethereum. It is designed to run alongside an Ethereum full node.
+
+## Links
+
+- [HackMD Notes (as part of Ethereum Protocol Fellowship final update)](https://hackmd.io/mDOVIKk2Sfeb2kbXORs_kQ?both)
+- [Holon presentation (16 Min)](https://www.youtube.com/watch?v=m94kB8SxO4U)
 
 Below you can see a system diagram of Holon and how it functions on a computer hosting an Ethereum full node (specifically interfacing with an execution client like Geth):
 
