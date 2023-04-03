@@ -29,7 +29,8 @@ async function run() {
   // Instantiate broker
   const rabbit_wrapper = new Broker();
   // Wait for RabbitMQ server to be up and running
-  await waitForPort(5672);
+  const rabbit_host = process.env.RABBITMQ_HOST || '0.0.0.0';
+  await waitForPort(5672, rabbit_host);
 
   /* Seed data */
   if (process.env.SEED === 'yes') {

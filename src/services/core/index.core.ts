@@ -19,8 +19,10 @@ async function run() {
   await initDataStores();
 
   Cache.getInstance();
+  
+  const rabbit_host = process.env.RABBITMQ_HOST || '0.0.0.0';
+  await waitForPort(5672, rabbit_host);
 
-  await waitForPort(5672);
 
   try {
     await rabbit_wrapper.init();

@@ -22,7 +22,8 @@ async function run() {
   const PORT = process.env.SERVICE_PORT;
 
   const rabbit_wrapper = new Broker();
-  await waitForPort(5672);
+  const rabbit_host = process.env.RABBITMQ_HOST || '0.0.0.0';
+  await waitForPort(5672, rabbit_host);
   await initDataStores();
 
   try {
