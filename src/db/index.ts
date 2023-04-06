@@ -7,10 +7,13 @@ import { Cache } from '@cache/index.cache';
 const initDataStores = async () => {
   const service = process.env.SERVICE_NAME || 'UNDEFINED';
 
+  const dbHost: string = process.env.DB_HOST || 'localhost';
+  const cacheHost: string = process.env.CACHE_HOST || 'localhost';
+  
   try {
     const connection = new DataSource({
       type: 'postgres',
-      host: process.env.DB_HOST || 'localhost', // 'db' (host name for postgres container)
+      host: dbHost, // 'db' (host name for postgres container)
       username: process.env.PG_USER,
       password: process.env.PG_PASSWORD,
       database: process.env.PG_DB,
@@ -19,8 +22,8 @@ const initDataStores = async () => {
       synchronize: true,
     });
 
-    await waitForService(5432); // PostgreSQL server
-    await waitForService(6379); // Redis server
+    await waitForService(5432, dbHost); // PostgreSQL server
+    await waitForService(6379, cacheHost); // Redis server
 
     await connection.initialize();
     console.log(`[${service}] Connected to Postgres`);
@@ -34,14 +37,14 @@ const initDataStores = async () => {
   }
 };
 
-async function waitForService(port_num: number) {
+async function waitForService(port_num: number, host: string) {
   const PORT_LABEL_MAP: IPortMap = {
     5432: 'Postgres',
     6379: 'redis-server',
     5000: 'scraper',
   };
 
-  while (!(await isReady(port_num))) {
+  while (!(await isReady(port_num, host))) {
     await timeout(1000, PORT_LABEL_MAP[port_num]);
   }
 }
@@ -55,9 +58,9 @@ function timeout(ms: number, label: string) {
   );
 }
 
-async function isReady(port_num: number) {
+async function isReady(port_num: number, host: string) {
   try {
-    const inUse = await check(port_num, process.env.HOST_IP_ADDR);
+    const inUse = await check(port_num, host);
     return inUse;
   } catch (err) {
     console.error(err);
